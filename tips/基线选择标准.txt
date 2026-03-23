@@ -1,0 +1,3 @@
+1.对比基线1：经典CNN模型（VGG/ResNet-50/DenseNet-121等）
+2.对比基线2：轻量化模型（MobileNetV3 (Small/Large)、ShuffleNetV2、GhostNet、ConvNeXt-V2）
+EfficientNet

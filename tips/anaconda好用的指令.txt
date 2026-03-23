@@ -1,0 +1,7 @@
+conda env list          # 看所有环境
+conda create -n 环境名 python=3.10  # 新建环境
+conda activate 环境名    # 进入环境
+conda deactivate        # 退出环境
+conda list              # 看当前装了哪些包
+conda install 包名      # 安装
+conda remove 包名       # 卸载

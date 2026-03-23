@@ -1,0 +1,71 @@
+结合你的项目结构和《AutoDL 避雷指南》，为你定制了一套从零基础到成功跑通第一个模型的全流程。
+
+这套流程严格遵守了“防爆盘”、“防断连”和“省钱”的原则：
+
+🔄 第一步：在 AutoDL 租用合适的机器
+选择地区与显卡：建议选择“北京A区”等资源较多的区。对于你的 CV 多标签分类项目，选择单张 RTX 3090 或 RTX 4090 就足够跑基线了。
+选择基础镜像（避雷点 6）：
+如果选了 4090 等新卡，必须选择高版本环境。
+镜图配置建议：PyTorch -> 选择 2.0 及以上版本 -> Python 3.9 -> CUDA 11.8 及以上。不要选太老的版本，否则无法调用显卡算力。
+开机：点击“立即创建”，等待机器状态变为“运行中”。
+📂 第二步：连接机器并上传项目与数据（核心排雷区）
+【⚠️ 避雷点 3：千万不要把项目放在系统盘 /root】
+
+机器运行后，点击“JupyterLab”进入网页端，打开一个 Terminal（终端）。
+输入命令，进入免费的 50GB 数据盘：
+
+cd /root/autodl-tmp
+上传代码：
+将你本地的 myreaesrch 文件夹压缩成 myreaesrch.zip。
+直接把 zip 文件拖拽到 JupyterLab 左侧的文件浏览器中（确保你在 /root/autodl-tmp 目录下）。
+在终端解压：unzip myreaesrch.zip
+上传庞大的数据集（图片等）：
+因为你的完整 train_images 等很大，网页拖拽容易断开。
+强烈建议 AutoDL 控制台提供的 “阿里云盘/百度网盘下载工具”，或者使用 Xftp / FileZilla 等工具直接连 SSH 通道把完整数据传到 /root/autodl-tmp/myreaesrch/data/raw/ 里面。
+🛠️ 第三步：配置运行环境
+进入你的项目目录，配置 Python 环境：
+
+
+cd /root/autodl-tmp/myreaesrch
+【⚠️ 避雷点 5：开启网络加速防 Timeout】
+依次在终端输入以下命令：
+
+
+# 1. 开启学术加速通道source /etc/network_turbo# 2. 安装你项目所需的依赖库pip install -r requirements.txt# 3. 安装完成后，关闭学术加速，防止影响代码内部的网络请求unset http_proxy && unset https_proxy
+🚀 第四步：挂起后台，开始跑第一个模型！
+不要直接敲 python train.py，否则网页一关训练断掉（避雷点 7）！这里我们使用 tmux 来保障你的训练：
+
+创建一个后台虚拟窗口（名字叫 train）：
+
+
+tmux new -s train
+在进入出来的绿色底边的新窗口中，确保你在项目目录下：
+
+
+cd /root/autodl-tmp/myreaesrch
+运行代码：
+你可以直接调用我们之前写好的单模型执行脚本，由于你默认的数据集路径可能还是 mini_data，我们要通过命令行参数指定到完整数据集：
+
+
+# 测试跑一个 resnet50，指定真实的数据集路径和更多的 epochspython train.py --model-name resnet50 \    --train-csv data/raw/train.csv \    --val-csv data/raw/val_split.csv \    --image-dir data/raw/train_images \    --epochs 30 --batch-size 32
+(如果之前你已经把 run_single.sh 里的路径改成了标准集合的路径，也可以直接运行：bash run_single.sh resnet50)
+
+安全离开（让它后台自己跑）：
+看到进度条跑起来后，在键盘上依次按组合键：先按 Ctrl+B，松开后按 D。
+此时你会退回主终端，提示 [detached (from session train)]。现在你就算关掉电脑、拔掉网线，云端也会默默把这 30 个 Epoch 跑完。
+
+👁️ 第五步：随时查看进度
+如果你晚上或者第二天想看看跑得怎么样了：
+
+连上机器的终端，输入：
+
+tmux attach -t train
+就能立刻看到之前的进度条和训练输出了！
+还可以使用 TensorBoard 查看损失折线图。在 AutoDL 控制台有个“自定义服务”，通过那个端口把 baseline 映射出来看可视化。
+🛑 第六步：收取战利品并安全收尾
+当你在 tmux 里看到 🎉 训练完成 [resnet50] 的字眼后：
+
+右键下载你 /root/autodl-tmp/myreaesrch/weights/resnet50_best.pth 这个保存下来的最优断点模型到你本地电脑。
+下载汇总了成绩的 ALL_MODELS_SUMMARY.csv 以备写论文使用。
+【⚠️ 避雷点 1与2：关机】 在网页右上角或功能面板上果断点击 “关机”。如果短期内都不做了，直接去控制台点击 “释放实例”，彻底停止扣费。
+Gemini 3.1 Pro (Preview) • 1x

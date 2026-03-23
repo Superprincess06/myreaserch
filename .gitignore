@@ -1,0 +1,8 @@
+data/raw/
+data/synthetic/
+weights/
+logs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

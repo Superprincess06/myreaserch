@@ -1,0 +1,113 @@
+myreaesrch  # 项目根目录（FGVC8 多标签分类实验工程）
+|
+|============================== 核心入口 ==============================
+|-- train.py                           # 训练入口：支持本地预训练自动匹配 + 训练后自动评估
+|-- evaluate.py                        # 评估入口：输出指标并自动落盘 JSON/CSV
+|-- README.md                          # 项目说明、运行命令与参数示例
+|-- requirements.txt                   # Python 依赖列表
+|-- .gitignore                         # Git 忽略规则（权重/缓存/临时文件等）
+|-- 目录结构.txt                        # 当前目录说明文档
+|
+|============================== 数据目录 ==============================
+|-- data/
+|   |-- raw/                           # 原始数据与切分文件
+|   |   |-- train.csv                  # 官方训练标注主表
+|   |   |-- train_split.csv            # 训练划分清单
+|   |   |-- val_split.csv              # 验证划分清单
+|   |   |-- test_split.csv             # 测试划分清单
+|   |   |-- sample_submission.csv      # 官方提交格式示例
+|   |   |-- train_images/              # 图像目录（训练/验证/测试可共用）
+|   |   |-- test_images/               # 独立测试图像目录（若使用则在命令中指定）
+|   |   \-- mini_data/                # 小样本调试集
+|   |       |-- mini_train_split.csv
+|   |       \-- mini_val_split.csv
+|   \-- synthetic/                    # 合成数据预留目录
+|
+|============================== 日志与结果 ==============================
+|-- logs/
+|   |-- baseline/                      # 训练日志与训练汇总
+|   |   |-- ALL_MODELS_SUMMARY.csv     # 各模型最佳验证集 Macro F1 汇总
+|   |   |-- mobilenetv3_small_training.log
+|   |   \-- mobilenetv3_small/        # TensorBoard 事件文件
+|   |
+|   |-- eval_results/                  # 评估结果目录（新增）
+|   |   |-- EVAL_SUMMARY.csv           # 所有评估的汇总表
+|   |   \-- <model>_<ckpt>_<time>.json # 单次评估明细（自动生成）
+|   |
+|   |-- architectures/                 # 网络结构导出文本
+|   |   |-- convnextv2_structure.txt
+|   |   |-- densenet121_structure.txt
+|   |   |-- efficientnet_structure.txt
+|   |   |-- ghostnet_structure.txt
+|   |   |-- mobilenetv3_large_structure.txt
+|   |   |-- mobilenetv3_small_structure.txt
+|   |   |-- resnet50_structure.txt
+|   |   \-- vgg16_structure.txt
+|   |
+|   \-- split_quality/                # 数据切分质量分析输出
+|       |-- split_quality_report.json
+|       |-- label_prevalence.png
+|       |-- label_sample_counts.png
+|       \-- prevalence_gap_heatmap.png
+|
+|============================== 模型与组件 ==============================
+|-- models/
+|   |-- __init__.py
+|   |-- mynet.py                       # 自定义模型入口
+|   \-- baseline/
+|       |-- __init__.py
+|       \-- builder.py                 # 统一模型工厂
+|
+|-- utils/
+|   |-- __init__.py
+|   |-- augment.py                     # 数据增强
+|   |-- dataset.py                     # 数据读取与标签解析
+|   |-- losses.py                      # 损失函数
+|   |-- metrics.py                     # 指标计算
+|   \-- split_data.py                 # 数据切分
+|
+|-- tools/
+|   |-- analyze_split_quality.py       # 切分质量分析
+|   |-- export_all_structures.py       # 导出模型结构
+|   \-- make_mini_dataset.py          # 生成 mini 数据集
+|
+|============================== 运行脚本 ==============================
+|-- scripts/
+|   |-- autodl_preflight.sh            # AutoDL 环境检查
+|   |-- run_single.sh                  # Linux: 单模型训练
+|   |-- run_single.bat                 # Windows: 单模型训练
+|   |-- run_all_baselines.sh           # Linux: 全基线串行训练
+|   \-- run_all_baselines.bat         # Windows: 全基线串行训练
+|
+|============================== 权重目录 ==============================
+|-- weights/
+|   |-- best_model.pth                 # 历史兼容文件（当前主流程不再主写入）
+|   |-- mobilenetv3_small_best.pth     # 模型最佳权重
+|   |-- mobilenetv3_small_last.pth     # 模型断点续训权重
+|   \-- pretrained/                   # 本地预训练权重池（按模型名自动匹配）
+|       |-- convnextv2_atto.safetensors
+|       |-- densenet121.safetensors
+|       |-- efficientnet_b0.safetensors
+|       |-- ghostnet_100.safetensors
+|       |-- mobilenetv3_large_100.safetensors
+|       |-- mobilenetv3_small_100.lamb_in1k.safetensors
+|       |-- mobilenetv3_small_100.safetensors
+|       |-- resnet50.safetensors
+|       |-- shufflenet_v2_x1_0.safetensors
+|       |-- vgg16.safetensors
+|       \-- manifest.json
+|
+|============================== 其他 ==============================
+|-- .vscode/
+|   \-- settings.json                  # VS Code 本地配置
+|
+\-- tips/                              # 项目笔记与参考资料
+    |-- AI论文推荐.txt
+    |-- anaconda好用的指令.txt
+    |-- autodl避雷指南.txt
+    |-- autodl操作全流程
+    |-- 基线选择标准.txt
+    |-- 我们的模型框架图.txt
+    |-- 查看Tensorboard.txt
+    |-- 硬件与超参数配置指南.txt
+    \-- 路线.txt

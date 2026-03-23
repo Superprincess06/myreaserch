@@ -1,0 +1,10 @@
+姿势一：VS Code 一键打开（最强烈推荐，最简单）
+如果你是用 VS Code 连着远程服务器写代码，那一切就太简单了，VS Code 内部直接集成了 TensorBoard：
+
+在 VS Code 界面，按下快捷键 Ctrl + Shift + P（Mac 是 Cmd + Shift + P）打开命令面板。
+
+输入 Python: Launch TensorBoard（启动 TensorBoard），按回车。
+
+它会弹出一个菜单让你选文件夹，你选择**“Select another folder”**，然后选中你代码里的 logs/baseline 文件夹。
+
+稍等几秒钟，VS Code 内部就会直接开一个新窗口，华丽的折线图就出来了！
